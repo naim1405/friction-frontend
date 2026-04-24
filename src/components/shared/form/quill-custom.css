@@ -1,0 +1,108 @@
+/* quill-custom.css */
+
+/* Remove default Quill borders */
+.quill-wrapper .quill-editor {
+    border: none !important;
+}
+
+.quill-wrapper .ql-toolbar {
+    border: none !important;
+    border-bottom: 1px solid hsl(var(--border)) !important;
+    background-color: hsl(var(--muted) / 0.3);
+    padding: 8px;
+    border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0;
+}
+
+.quill-wrapper .ql-container {
+    border: none !important;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.quill-wrapper .ql-editor {
+    min-height: 150px;
+    padding: 12px;
+    font-family: inherit;
+}
+
+.quill-wrapper .ql-editor.ql-blank::before {
+    color: hsl(var(--muted-foreground));
+    opacity: 0.6;
+    font-style: normal;
+}
+
+.quill-wrapper .ql-editor:focus {
+    outline: none;
+}
+
+/* Toolbar button styles */
+.quill-wrapper .ql-toolbar button {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 3px 5px;
+    margin: 0 2px;
+    border-radius: calc(var(--radius) - 4px);
+}
+
+.quill-wrapper .ql-toolbar button:hover {
+    background-color: hsl(var(--accent));
+}
+
+.quill-wrapper .ql-toolbar button.ql-active {
+    background-color: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+}
+
+.quill-wrapper .ql-toolbar .ql-stroke {
+    stroke: hsl(var(--foreground));
+}
+
+.quill-wrapper .ql-toolbar .ql-fill {
+    fill: hsl(var(--foreground));
+}
+
+.quill-wrapper .ql-toolbar .ql-picker {
+    color: hsl(var(--foreground));
+}
+
+/* Dropdown styles */
+.quill-wrapper .ql-toolbar .ql-picker-label {
+    padding: 2px 4px;
+    border-radius: calc(var(--radius) - 4px);
+}
+
+.quill-wrapper .ql-toolbar .ql-picker-label:hover {
+    background-color: hsl(var(--accent));
+}
+
+/* Dark mode support */
+.dark .quill-wrapper .ql-toolbar {
+    background-color: hsl(var(--muted) / 0.2);
+}
+
+.dark .quill-wrapper .ql-editor {
+    color: hsl(var(--foreground));
+}
+
+/* Scrollbar styles */
+.quill-wrapper .ql-editor::-webkit-scrollbar {
+    width: 6px;
+}
+
+.quill-wrapper .ql-editor::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.quill-wrapper .ql-editor::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 3px;
+}
+
+.quill-wrapper .ql-editor::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.3);
+}
+
+/* Ensure proper spacing at the bottom */
+.quill-wrapper .ql-container.ql-snow {
+    padding-bottom: 42px; /* Space for Quill's internal resize handle */
+}
