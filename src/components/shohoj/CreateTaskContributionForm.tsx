@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Plus, Send, Trash2, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import useUserSlice from "@/src/redux/features/user/useUserSlice";
 import { getAccessToken } from "@/src/utils/authTokens";
 
 type StepDraft = {
+  id: string;
   title: string;
   description: string;
   estimatedTime: string;
@@ -19,7 +20,8 @@ type StepDraft = {
   tips: string;
 };
 
-const emptyStep = (): StepDraft => ({
+const createStepDraft = (): StepDraft => ({
+  id: crypto.randomUUID(),
   title: "",
   description: "",
   estimatedTime: "",
@@ -67,25 +69,18 @@ export default function CreateTaskContributionForm() {
   const [estimatedCostBdt, setEstimatedCostBdt] = useState("");
   const [difficulty, setDifficulty] = useState("Moderate");
   const [documents, setDocuments] = useState("");
-  const [steps, setSteps] = useState<StepDraft[]>([emptyStep()]);
+  const [steps, setSteps] = useState<StepDraft[]>([createStepDraft()]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdTask, setCreatedTask] = useState<{ slug: string; title: string } | null>(null);
 
-  const validSteps = useMemo(
-    () => steps.filter((step) => step.title.trim() && step.description.trim()),
-    [steps]
-  );
-
-  const updateStep = (index: number, field: keyof StepDraft, value: string) => {
+  const updateStep = (id: string, field: Exclude<keyof StepDraft, "id">, value: string) => {
     setSteps((current) =>
-      current.map((step, stepIndex) =>
-        stepIndex === index ? { ...step, [field]: value } : step
-      )
+      current.map((step) => (step.id === id ? { ...step, [field]: value } : step))
     );
   };
 
-  const removeStep = (index: number) => {
-    setSteps((current) => current.filter((_, stepIndex) => stepIndex !== index));
+  const removeStep = (id: string) => {
+    setSteps((current) => current.filter((step) => step.id !== id));
   };
 
   const submitTask = async () => {
@@ -98,6 +93,22 @@ export default function CreateTaskContributionForm() {
       toast.error("Add a task title and summary first.");
       return;
     }
+
+    const incompleteStepNumbers = steps
+      .map((step, index) => ({ step, number: index + 1 }))
+      .filter(
+        ({ step }) =>
+          (step.title.trim() || step.description.trim()) &&
+          !(step.title.trim() && step.description.trim())
+      )
+      .map(({ number }) => number);
+
+    if (incompleteStepNumbers.length > 0) {
+      toast.error(`Complete title and description for step ${incompleteStepNumbers.join(", ")}.`);
+      return;
+    }
+
+    const validSteps = steps.filter((step) => step.title.trim() && step.description.trim());
 
     if (validSteps.length === 0) {
       toast.error("Add at least one step with a title and description.");
@@ -140,7 +151,7 @@ export default function CreateTaskContributionForm() {
       setEstimatedDays("");
       setEstimatedCostBdt("");
       setDocuments("");
-      setSteps([emptyStep()]);
+      setSteps([createStepDraft()]);
       toast.success("Task submitted successfully.");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Task submission failed.");
@@ -266,7 +277,7 @@ export default function CreateTaskContributionForm() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setSteps((current) => [...current, emptyStep()])}
+            onClick={() => setSteps((current) => [...current, createStepDraft()])}
             disabled={!isLoggedIn}
             className="rounded-[8px]"
           >
@@ -276,14 +287,14 @@ export default function CreateTaskContributionForm() {
         </div>
 
         {steps.map((step, index) => (
-          <div key={index} className="rounded-[8px] border border-slate-200 bg-slate-50 p-4">
+          <div key={step.id} className="rounded-[8px] border border-slate-200 bg-slate-50 p-4">
             <div className="flex items-center justify-between gap-3">
               <p className="font-semibold text-slate-900">Step {index + 1}</p>
               {steps.length > 1 ? (
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => removeStep(index)}
+                  onClick={() => removeStep(step.id)}
                   disabled={!isLoggedIn}
                   className="size-9 rounded-[8px] p-0"
                   aria-label={`Remove step ${index + 1}`}
@@ -296,14 +307,14 @@ export default function CreateTaskContributionForm() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <Input
                 value={step.title}
-                onChange={(event) => updateStep(index, "title", event.target.value)}
+                onChange={(event) => updateStep(step.id, "title", event.target.value)}
                 placeholder="Step title"
                 disabled={!isLoggedIn}
                 className="rounded-[8px] bg-white"
               />
               <Input
                 value={step.estimatedTime}
-                onChange={(event) => updateStep(index, "estimatedTime", event.target.value)}
+                onChange={(event) => updateStep(step.id, "estimatedTime", event.target.value)}
                 placeholder="Estimated time"
                 disabled={!isLoggedIn}
                 className="rounded-[8px] bg-white"
@@ -312,28 +323,28 @@ export default function CreateTaskContributionForm() {
                 type="number"
                 min="0"
                 value={step.estimatedCost}
-                onChange={(event) => updateStep(index, "estimatedCost", event.target.value)}
+                onChange={(event) => updateStep(step.id, "estimatedCost", event.target.value)}
                 placeholder="Step cost"
                 disabled={!isLoggedIn}
                 className="rounded-[8px] bg-white"
               />
               <Textarea
                 value={step.description}
-                onChange={(event) => updateStep(index, "description", event.target.value)}
+                onChange={(event) => updateStep(step.id, "description", event.target.value)}
                 placeholder="Step description"
                 disabled={!isLoggedIn}
                 className="min-h-20 rounded-[8px] bg-white sm:col-span-2"
               />
               <Textarea
                 value={step.documents}
-                onChange={(event) => updateStep(index, "documents", event.target.value)}
+                onChange={(event) => updateStep(step.id, "documents", event.target.value)}
                 placeholder="Step documents, one per line"
                 disabled={!isLoggedIn}
                 className="min-h-20 rounded-[8px] bg-white"
               />
               <Textarea
                 value={step.tips}
-                onChange={(event) => updateStep(index, "tips", event.target.value)}
+                onChange={(event) => updateStep(step.id, "tips", event.target.value)}
                 placeholder="Tips, one per line"
                 disabled={!isLoggedIn}
                 className="min-h-20 rounded-[8px] bg-white"
