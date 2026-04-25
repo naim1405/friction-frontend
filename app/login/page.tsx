@@ -14,12 +14,11 @@ import { login } from "@/src/service/auth/login";
 import type { LoginFormValues } from "@/src/types";
 import { getErrorMessage } from "@/src/utils/apiError";
 import { loginSchema } from "@/src/zod";
-import { log } from "console";
 import useUserSlice from "@/src/redux/features/user/useUserSlice";
 
 const loginHighlights = [
-	"Encrypted, cookie-based sessions",
-	"Access control by admin role",
+	"Contribute step improvements with your account",
+	"Track saved tasks and community activity",
 	"Password reset available instantly",
 ];
 
@@ -67,17 +66,17 @@ const LoginPage = () => {
 
 					<div className="space-y-4">
 						
-                        <span className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
+						<span className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
 							<Sparkles className="size-3.5" />
 							Welcome Back
 						</span>
 
 						<h1 className="text-4xl font-semibold leading-tight">
-							Manage your admin workspace in one secure dashboard.
+							Sign in to contribute better real-world task guidance.
 						</h1>
 
 						<p className="max-w-md text-sm text-white/85 sm:text-base">
-							Sign in to continue tracking users, monitoring operations, and handling sensitive actions with protected sessions.
+							Use your account to save tasks, add community insights, and help improve Shohoj Path for everyone.
 						</p>
                         
 					</div>
@@ -98,9 +97,9 @@ const LoginPage = () => {
 							<KeyRound className="size-3.5" />
 							Sign In
 						</span>
-						<h2 className="text-2xl font-semibold text-slate-900 sm:text-3xl">Welcome to your panel</h2>
+						<h2 className="text-2xl font-semibold text-slate-900 sm:text-3xl">Welcome back to Shohoj Path</h2>
 						<p className="text-sm text-slate-600 sm:text-base">
-							Use your admin email and password to access your account.
+							Use your email and password to continue contributing and tracking tasks.
 						</p>
 					</div>
 
@@ -152,7 +151,7 @@ const LoginPage = () => {
 								</span>
 							) : (
 								<span className="inline-flex items-center gap-2">
-									Continue to Dashboard
+									Continue
 									<ArrowRight className="size-4" />
 								</span>
 							)}

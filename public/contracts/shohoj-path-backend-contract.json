@@ -1,0 +1,62 @@
+{
+  "project": "Shohoj Path",
+  "title": "Evabe Jan",
+  "tagline": "Lunch er agei hobe",
+  "baseUrl": "http://localhost:3000/api",
+  "notes": [
+    "Anonymous users can browse tasks, search, and route summaries.",
+    "Authenticated users can submit contributions and access contribution history.",
+    "Search should support both keyword and semantic intent matching."
+  ],
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "authRequired": false
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/:slug",
+      "authRequired": false
+    },
+    {
+      "method": "GET",
+      "path": "/search?q=passport",
+      "authRequired": false
+    },
+    {
+      "method": "GET",
+      "path": "/community/insights",
+      "authRequired": false
+    },
+    {
+      "method": "GET",
+      "path": "/navigation/:slug",
+      "authRequired": false
+    },
+    {
+      "method": "POST",
+      "path": "/contributions",
+      "authRequired": true,
+      "headers": {
+        "x-mock-user-id": "mock-user-1"
+      },
+      "body": {
+        "taskSlug": "apply-passport",
+        "stepId": "passport-step-6",
+        "type": "improvement",
+        "comment": "Police verification was faster when I kept my landlord phone number ready."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contracts",
+      "authRequired": false
+    },
+    {
+      "method": "GET",
+      "path": "/location/reverse?lat=23.7801&lon=90.4076",
+      "authRequired": false
+    }
+  ]
+}

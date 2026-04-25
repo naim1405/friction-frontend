@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -50,6 +51,8 @@
 }
 
 :root {
+  --font-geist-sans: "Segoe UI", "Noto Sans Bengali", "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -128,4 +131,30 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  font-family: var(--font-geist-sans);
+  background: white;
+}
+
+.shohoj-map-icon-wrapper {
+  background: transparent;
+  border: 0;
+}
+
+.shohoj-map-icon {
+  display: inline-flex;
+  height: 34px;
+  min-width: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border-width: 3px;
+  padding-inline: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 14px 30px -18px rgba(15, 23, 42, 0.7);
 }

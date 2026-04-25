@@ -17,8 +17,8 @@ import { getErrorMessage } from "@/src/utils/apiError";
 import { signupSchema } from "@/src/zod";
 
 const signupHighlights = [
-	"Instant onboarding for admin users",
-	"Role-based permissions from day one",
+	"Start contributing your real experiences",
+	"Save tasks and return to them later",
 	"Secure password rules and validation",
 ];
 
@@ -69,13 +69,13 @@ const SignupPage = () => {
                     <div className="space-y-4">
 						<span className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
 							<Sparkles className="size-3.5" />
-							New Admin Access
+							Join the community
 						</span>
 						<h1 className="text-4xl font-semibold leading-tight">
-							Create an account and launch your control center.
+							Create an account and help improve real-world task journeys.
 						</h1>
 						<p className="max-w-md text-sm text-white/85 sm:text-base">
-							Set up your admin profile once and start managing teams, data, and workflows in a secure environment.
+							Set up your profile once to save tasks, share insights, and contribute practical updates to Shohoj Path.
 						</p>
 					</div>
 
@@ -96,9 +96,9 @@ const SignupPage = () => {
 							<UserRound className="size-3.5" />
 							Create Account
 						</span>
-						<h2 className="text-2xl font-semibold text-slate-900 sm:text-3xl">Register your admin profile</h2>
+						<h2 className="text-2xl font-semibold text-slate-900 sm:text-3xl">Create your Shohoj Path profile</h2>
 						<p className="text-sm text-slate-600 sm:text-base">
-							Fill in your details below to create your workspace access.
+							Fill in your details below to start contributing and saving task journeys.
 						</p>
 					</div>
 

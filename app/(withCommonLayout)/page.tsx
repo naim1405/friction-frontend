@@ -1,125 +1,167 @@
-"use client";
-
-import { ArrowRight, CheckCircle2, LockKeyhole, UsersRound } from "lucide-react";
 import Link from "next/link";
-import useUserSlice from "@/src/redux/features/user/useUserSlice";
+import {
+  ArrowRight,
+  Bot,
+  MessageCircleHeart,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import TaskSearchForm from "@/src/components/shohoj/TaskSearchForm";
+import ContributionGate from "@/src/components/shohoj/ContributionGate";
+import TaskMapPanel from "@/src/components/shohoj/TaskMapPanel";
+import {
+  communityInsights,
+  homeHighlights,
+  shohojPathCopy,
+  tasks,
+} from "@/lib/shohoj-path/mock-data";
 
-const Main = () => {
-    const { user } = useUserSlice();
-    const isLoggedIn = Boolean(user.userId);
+export default function HomePage() {
+  const featuredTask = tasks[0];
+  const popularTasks = tasks.slice(0, 3);
 
-    const points = [
-        "Secure cookie-based sessions and role control",
-        "Fast onboarding for admin users and operators",
-        "Recovery-ready auth flow with reset and change password",
-    ];
+  return (
+    <main className="overflow-hidden">
+      <section className="relative border-b border-emerald-100 bg-[radial-gradient(circle_at_top_left,_rgba(16,185,129,0.18),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(251,191,36,0.16),_transparent_28%),linear-gradient(180deg,#f8fffb_0%,#ffffff_72%)]">
+        <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-16">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/80 px-4 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm">
+                <Sparkles className="size-3.5" />
+                {shohojPathCopy.title}
+              </span>
+              <div className="space-y-3">
+                <h1 className="max-w-4xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
+                  {shohojPathCopy.brand}
+                </h1>
+                <p className="text-xl font-medium text-emerald-700">{shohojPathCopy.tagline}</p>
+                <p className="max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">
+                  {shohojPathCopy.pitch}
+                </p>
+              </div>
+            </div>
 
-    const cards = [
-        {
-            title: "Authentication Suite",
-            description: "Login, signup, forgot, reset, and change-password flows in one coherent experience.",
-            icon: <LockKeyhole className="size-5" />,
-        },
-        {
-            title: "Admin Lifecycle",
-            description: "Manage account setup and security updates with minimal friction.",
-            icon: <UsersRound className="size-5" />,
-        },
-        {
-            title: "Operational Readiness",
-            description: "Designed UI patterns that keep credential and account workflows clear under pressure.",
-            icon: <CheckCircle2 className="size-5" />,
-        },
-    ];
+            <TaskSearchForm />
 
-    return (
-        <main className="relative overflow-hidden px-4 py-10 sm:px-6 lg:px-8">
-            <div className="pointer-events-none absolute -left-28 top-8 h-80 w-80 rounded-full bg-cyan-300/25 blur-3xl" />
-            <div className="pointer-events-none absolute -right-24 top-24 h-80 w-80 rounded-full bg-amber-300/20 blur-3xl" />
+            <div className="grid gap-4 sm:grid-cols-3">
+              {homeHighlights.map((highlight) => (
+                <article
+                  key={highlight.title}
+                  className="rounded-[28px] border border-white/70 bg-white/85 p-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.32)] backdrop-blur"
+                >
+                  <h2 className="text-base font-semibold text-slate-900">{highlight.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{highlight.description}</p>
+                </article>
+              ))}
+            </div>
+          </div>
 
-            <section className="relative mx-auto w-full max-w-6xl rounded-3xl border border-black/10 bg-white/75 p-6 shadow-lg backdrop-blur-sm sm:p-10">
-                <div className={`grid gap-8 ${isLoggedIn ? "lg:grid-cols-[1.15fr_0.85fr]" : "lg:grid-cols-1"} lg:items-center`}>
-                    <div className="space-y-6">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
-                            Authentication Platform
-                        </span>
+          <div className="relative">
+            <TaskMapPanel
+              title="Dashboard location map"
+              description="OpenStreetMap shows your current location if shared, or Bangladesh by default. Routes appear when you select a task."
+              heightClassName="min-h-[500px]"
+            />
+          </div>
+        </div>
+      </section>
 
-                        <div className="space-y-3">
-                            <h1 className="text-3xl font-semibold leading-tight text-slate-900 sm:text-5xl">
-                                Modern admin access, built for secure daily operations.
-                            </h1>
-                            <p className="max-w-2xl text-sm text-slate-600 sm:text-base">
-                                A complete authentication workspace with strong UX patterns for access control, account recovery,
-                                and credential management.
-                            </p>
-                        </div>
+      <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Popular tasks</p>
+                <h2 className="mt-2 text-2xl font-semibold text-slate-950">Start from a proven path</h2>
+              </div>
+              <Link href="/search" className="text-sm font-semibold text-emerald-700">
+                Explore all
+              </Link>
+            </div>
 
-                        <ul className="space-y-2">
-                            {points.map((point) => (
-                                <li key={point} className="flex items-center gap-3 text-sm text-slate-700 sm:text-base">
-                                    <CheckCircle2 className="size-4 text-emerald-600" />
-                                    <span>{point}</span>
-                                </li>
-                            ))}
-                        </ul>
-
-                        <div className="flex flex-wrap items-center gap-3">
-                            <Link
-                                href={isLoggedIn ? "/create" : "/login"}
-                                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
-                            >
-                                {isLoggedIn ? "Create Account" : "Sign In"}
-                                <ArrowRight className="size-4" />
-                            </Link>
-                        </div>
+            <div className="mt-6 space-y-4">
+              {popularTasks.map((task) => (
+                <Link
+                  key={task.slug}
+                  href={`/tasks/${task.slug}`}
+                  className="block rounded-[26px] border border-slate-100 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-white"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-900">{task.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">{task.summary}</p>
                     </div>
+                    <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                      {task.category}
+                    </span>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-500">
+                    <span className="rounded-full bg-white px-3 py-1">Steps {task.stepsCount}</span>
+                    <span className="rounded-full bg-white px-3 py-1">Locations {task.locationsCount}</span>
+                    <span className="rounded-full bg-white px-3 py-1">Cost BDT {task.estimatedCostBdt}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
 
-                    {isLoggedIn && (
-                        <div className="rounded-2xl border border-black/10 bg-white/90 p-6 shadow-sm">
-                            <h2 className="text-lg font-semibold text-slate-900">Auth Workflows</h2>
-                            <p className="mt-1 text-sm text-slate-600">Quick links to your primary account actions.</p>
-
-                            <div className="mt-5 grid gap-3">
-                                <Link
-                                    href="/create"
-                                    className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
-                                >
-                                    Create Account
-                                </Link>
-                                <Link
-                                    href="/admin"
-                                    className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
-                                >
-                                    Admin List
-                                </Link>
-                                <Link
-                                    href="/change"
-                                    className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
-                                >
-                                    Change Password
-                                </Link>
-                            </div>
-                        </div>
-                    )}
+          <div className="space-y-6">
+            <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                  <MessageCircleHeart className="size-5" />
+                </span>
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-950">Community insights</h2>
+                  <p className="text-sm text-slate-600">Real experiences help the best workflow rise to the top.</p>
                 </div>
-            </section>
+              </div>
 
-            <section className="mx-auto mt-8 grid w-full max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {cards.map((card) => (
-                    <article
-                        key={card.title}
-                        className="rounded-2xl border border-black/10 bg-white/80 p-5 shadow-sm backdrop-blur-sm"
-                    >
-                        <span className="inline-flex size-9 items-center justify-center rounded-lg bg-slate-900 text-white">
-                            {card.icon}
-                        </span>
-                        <h3 className="mt-4 text-lg font-semibold text-slate-900">{card.title}</h3>
-                        <p className="mt-2 text-sm text-slate-600">{card.description}</p>
-                    </article>
+              <div className="mt-5 space-y-4">
+                {communityInsights.map((insight) => (
+                  <article key={insight.id} className="rounded-[24px] bg-slate-50 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="font-semibold text-slate-900">{insight.title}</h3>
+                      <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-amber-700">
+                        {insight.upvotes} upvotes
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">{insight.body}</p>
+                  </article>
                 ))}
-            </section>
-        </main>
-    );
-};
+              </div>
+            </div>
 
-export default Main;
+            <ContributionGate taskSlug={featuredTask.slug} taskTitle={featuredTask.title} />
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-emerald-100 bg-slate-950 py-12 text-white">
+        <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
+          <article className="rounded-[28px] border border-white/10 bg-white/5 p-6">
+            <Bot className="size-6 text-emerald-300" />
+            <h2 className="mt-4 text-xl font-semibold">AI Assistant</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Explain confusing forms, summarize next actions, and answer task questions in plain Bangla or English.
+            </p>
+          </article>
+          <article className="rounded-[28px] border border-white/10 bg-white/5 p-6">
+            <ArrowRight className="size-6 text-emerald-300" />
+            <h2 className="mt-4 text-xl font-semibold">Map-first decisions</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Turn scattered locations into a useful order so people can finish more in fewer trips.
+            </p>
+          </article>
+          <article className="rounded-[28px] border border-white/10 bg-white/5 p-6">
+            <ShieldCheck className="size-6 text-emerald-300" />
+            <h2 className="mt-4 text-xl font-semibold">Continuous improvement</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Votes, comments, and AI optimization keep the platform learning from real outcomes over time.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+  );
+}

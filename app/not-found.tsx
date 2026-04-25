@@ -1,15 +1,9 @@
 "use client";
 
-import { ArrowLeft, Compass, Home, SearchX } from "lucide-react";
+import { ArrowLeft, Home, SearchX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
-const quickLinks = [
-  { href: "/login", label: "Login" },
-  { href: "/signup", label: "Sign up" },
-  { href: "/forget", label: "Forgot password" },
-];
 
 export default function NotFound() {
   const router = useRouter();
