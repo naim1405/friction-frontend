@@ -1,27 +1,32 @@
 import { getAccessToken } from "@/src/utils/authTokens";
 
 export const getMe = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/me`, {
-        method: "GET",
-        credentials: "include",
-        headers: getAccessToken() ? { Authorization: `Bearer ${getAccessToken()}` } : undefined,
-    });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/me`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: getAccessToken()
+        ? { Authorization: `Bearer ${getAccessToken()}` }
+        : undefined,
+    },
+  );
 
-    const result = await response.json().catch(() => null);
+  const result = await response.json().catch(() => null);
 
-    if (!response.ok || !result?.success) {
-        return {
-            success: false,
-            userId: "",
-            email: "",
-        };
-    }
-
+  if (!response.ok || !result?.success) {
     return {
-        success: true,
-        userId: result.data?.id ?? "",
-        email: result.data?.email ?? "",
-        role: result.data?.role ?? "",
-        phone: result.data?.phone ?? "",
+      success: false,
+      userId: "",
+      email: "",
     };
+  }
+
+  return {
+    success: true,
+    userId: result.data?.id ?? "",
+    email: result.data?.email ?? "",
+    role: result.data?.role ?? "",
+    phone: result.data?.phone ?? "",
+  };
 };

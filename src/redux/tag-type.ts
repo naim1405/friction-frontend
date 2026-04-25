@@ -1,7 +1,5 @@
 export enum tagTypes {
-    meta = 'meta'
+  meta = "meta",
 }
 
-export const tagTypesList = [
-    tagTypes.meta
-]
+export const tagTypesList = [tagTypes.meta];

@@ -15,12 +15,15 @@ export default async function SearchPage({
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <section className="rounded-[34px] border border-emerald-100 bg-[linear-gradient(180deg,#f8fffb_0%,#ffffff_100%)] p-6 shadow-sm sm:p-8">
         <div className="space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">Search tasks</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+            Search tasks
+          </p>
           <h1 className="text-3xl font-semibold text-slate-950 sm:text-4xl">
             Find the clearest path for your next real-world task
           </h1>
           <p className="max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-            Search in plain language and explore tasks with steps, documents, locations, time, and cost.
+            Search in plain language and explore tasks with steps, documents,
+            locations, time, and cost.
           </p>
         </div>
 
@@ -57,13 +60,25 @@ export default async function SearchPage({
                     {task.difficulty}
                   </span>
                 </div>
-                <h3 className="mt-4 text-xl font-semibold text-slate-900">{task.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{task.summary}</p>
+                <h3 className="mt-4 text-xl font-semibold text-slate-900">
+                  {task.title}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {task.summary}
+                </p>
                 <div className="mt-5 flex flex-wrap gap-2 text-xs text-slate-500">
-                  <span className="rounded-full bg-slate-50 px-3 py-1">Steps {task.stepsCount}</span>
-                  <span className="rounded-full bg-slate-50 px-3 py-1">Locations {task.locationsCount}</span>
-                  <span className="rounded-full bg-slate-50 px-3 py-1">{task.estimatedDays}</span>
-                  <span className="rounded-full bg-slate-50 px-3 py-1">BDT {task.estimatedCostBdt}</span>
+                  <span className="rounded-full bg-slate-50 px-3 py-1">
+                    Steps {task.stepsCount}
+                  </span>
+                  <span className="rounded-full bg-slate-50 px-3 py-1">
+                    Locations {task.locationsCount}
+                  </span>
+                  <span className="rounded-full bg-slate-50 px-3 py-1">
+                    {task.estimatedDays}
+                  </span>
+                  <span className="rounded-full bg-slate-50 px-3 py-1">
+                    BDT {task.estimatedCostBdt}
+                  </span>
                 </div>
               </Link>
             ))}
@@ -71,9 +86,12 @@ export default async function SearchPage({
         ) : (
           <div className="rounded-[30px] border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
             <SearchX className="mx-auto size-10 text-slate-300" />
-            <h3 className="mt-4 text-xl font-semibold text-slate-900">No tasks matched yet</h3>
+            <h3 className="mt-4 text-xl font-semibold text-slate-900">
+              No tasks matched yet
+            </h3>
             <p className="mt-2 text-sm text-slate-600">
-              Try another phrase like &quot;passport&quot;, &quot;bank account&quot;, or &quot;trade license&quot;.
+              Try another phrase like &quot;passport&quot;, &quot;bank
+              account&quot;, or &quot;trade license&quot;.
             </p>
           </div>
         )}

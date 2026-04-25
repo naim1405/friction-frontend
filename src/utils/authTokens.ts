@@ -16,7 +16,10 @@ export function getAccessToken() {
   return localStorage.getItem(ACCESS_TOKEN_KEY) ?? "";
 }
 
-export function persistAuthTokens(tokens: { accessToken?: string; refreshToken?: string }) {
+export function persistAuthTokens(tokens: {
+  accessToken?: string;
+  refreshToken?: string;
+}) {
   if (!canUseBrowserStorage()) {
     return;
   }

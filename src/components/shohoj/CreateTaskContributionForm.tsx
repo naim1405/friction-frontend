@@ -37,7 +37,8 @@ const splitLines = (value: string) =>
     .filter(Boolean);
 
 async function postTask(payload: unknown) {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000/api/v1";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000/api/v1";
   const token = getAccessToken();
 
   const response = await fetch(`${baseUrl}/tasks`, {
@@ -71,11 +72,20 @@ export default function CreateTaskContributionForm() {
   const [documents, setDocuments] = useState("");
   const [steps, setSteps] = useState<StepDraft[]>([createStepDraft()]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [createdTask, setCreatedTask] = useState<{ slug: string; title: string } | null>(null);
+  const [createdTask, setCreatedTask] = useState<{
+    slug: string;
+    title: string;
+  } | null>(null);
 
-  const updateStep = (id: string, field: Exclude<keyof StepDraft, "id">, value: string) => {
+  const updateStep = (
+    id: string,
+    field: Exclude<keyof StepDraft, "id">,
+    value: string,
+  ) => {
     setSteps((current) =>
-      current.map((step) => (step.id === id ? { ...step, [field]: value } : step))
+      current.map((step) =>
+        step.id === id ? { ...step, [field]: value } : step,
+      ),
     );
   };
 
@@ -99,16 +109,20 @@ export default function CreateTaskContributionForm() {
       .filter(
         ({ step }) =>
           (step.title.trim() || step.description.trim()) &&
-          !(step.title.trim() && step.description.trim())
+          !(step.title.trim() && step.description.trim()),
       )
       .map(({ number }) => number);
 
     if (incompleteStepNumbers.length > 0) {
-      toast.error(`Complete title and description for step ${incompleteStepNumbers.join(", ")}.`);
+      toast.error(
+        `Complete title and description for step ${incompleteStepNumbers.join(", ")}.`,
+      );
       return;
     }
 
-    const validSteps = steps.filter((step) => step.title.trim() && step.description.trim());
+    const validSteps = steps.filter(
+      (step) => step.title.trim() && step.description.trim(),
+    );
 
     if (validSteps.length === 0) {
       toast.error("Add at least one step with a title and description.");
@@ -130,7 +144,8 @@ export default function CreateTaskContributionForm() {
         difficulty,
         documents: splitLines(documents),
         aiSummary: summary.trim(),
-        communityTip: "Submitted by the community. Add comments and votes to improve this path.",
+        communityTip:
+          "Submitted by the community. Add comments and votes to improve this path.",
         coverLabel: category,
         isPublished: true,
         steps: validSteps.map((step, index) => ({
@@ -154,7 +169,9 @@ export default function CreateTaskContributionForm() {
       setSteps([createStepDraft()]);
       toast.success("Task submitted successfully.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Task submission failed.");
+      toast.error(
+        error instanceof Error ? error.message : "Task submission failed.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -164,7 +181,10 @@ export default function CreateTaskContributionForm() {
     <section className="rounded-[8px] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <label className="text-sm font-semibold text-slate-900" htmlFor="task-title">
+          <label
+            className="text-sm font-semibold text-slate-900"
+            htmlFor="task-title"
+          >
             Task title
           </label>
           <Input
@@ -178,7 +198,10 @@ export default function CreateTaskContributionForm() {
         </div>
 
         <div>
-          <label className="text-sm font-semibold text-slate-900" htmlFor="task-category">
+          <label
+            className="text-sm font-semibold text-slate-900"
+            htmlFor="task-category"
+          >
             Category
           </label>
           <select
@@ -196,7 +219,10 @@ export default function CreateTaskContributionForm() {
         </div>
 
         <div>
-          <label className="text-sm font-semibold text-slate-900" htmlFor="task-difficulty">
+          <label
+            className="text-sm font-semibold text-slate-900"
+            htmlFor="task-difficulty"
+          >
             Difficulty
           </label>
           <select
@@ -213,7 +239,10 @@ export default function CreateTaskContributionForm() {
         </div>
 
         <div>
-          <label className="text-sm font-semibold text-slate-900" htmlFor="task-days">
+          <label
+            className="text-sm font-semibold text-slate-900"
+            htmlFor="task-days"
+          >
             Estimated time
           </label>
           <Input
@@ -227,7 +256,10 @@ export default function CreateTaskContributionForm() {
         </div>
 
         <div>
-          <label className="text-sm font-semibold text-slate-900" htmlFor="task-cost">
+          <label
+            className="text-sm font-semibold text-slate-900"
+            htmlFor="task-cost"
+          >
             Estimated cost
           </label>
           <Input
@@ -243,7 +275,10 @@ export default function CreateTaskContributionForm() {
         </div>
 
         <div className="sm:col-span-2">
-          <label className="text-sm font-semibold text-slate-900" htmlFor="task-summary">
+          <label
+            className="text-sm font-semibold text-slate-900"
+            htmlFor="task-summary"
+          >
             Summary
           </label>
           <Textarea
@@ -257,7 +292,10 @@ export default function CreateTaskContributionForm() {
         </div>
 
         <div className="sm:col-span-2">
-          <label className="text-sm font-semibold text-slate-900" htmlFor="task-documents">
+          <label
+            className="text-sm font-semibold text-slate-900"
+            htmlFor="task-documents"
+          >
             Required documents
           </label>
           <Textarea
@@ -277,7 +315,9 @@ export default function CreateTaskContributionForm() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setSteps((current) => [...current, createStepDraft()])}
+            onClick={() =>
+              setSteps((current) => [...current, createStepDraft()])
+            }
             disabled={!isLoggedIn}
             className="rounded-[8px]"
           >
@@ -287,7 +327,10 @@ export default function CreateTaskContributionForm() {
         </div>
 
         {steps.map((step, index) => (
-          <div key={step.id} className="rounded-[8px] border border-slate-200 bg-slate-50 p-4">
+          <div
+            key={step.id}
+            className="rounded-[8px] border border-slate-200 bg-slate-50 p-4"
+          >
             <div className="flex items-center justify-between gap-3">
               <p className="font-semibold text-slate-900">Step {index + 1}</p>
               {steps.length > 1 ? (
@@ -307,14 +350,18 @@ export default function CreateTaskContributionForm() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <Input
                 value={step.title}
-                onChange={(event) => updateStep(step.id, "title", event.target.value)}
+                onChange={(event) =>
+                  updateStep(step.id, "title", event.target.value)
+                }
                 placeholder="Step title"
                 disabled={!isLoggedIn}
                 className="rounded-[8px] bg-white"
               />
               <Input
                 value={step.estimatedTime}
-                onChange={(event) => updateStep(step.id, "estimatedTime", event.target.value)}
+                onChange={(event) =>
+                  updateStep(step.id, "estimatedTime", event.target.value)
+                }
                 placeholder="Estimated time"
                 disabled={!isLoggedIn}
                 className="rounded-[8px] bg-white"
@@ -323,28 +370,36 @@ export default function CreateTaskContributionForm() {
                 type="number"
                 min="0"
                 value={step.estimatedCost}
-                onChange={(event) => updateStep(step.id, "estimatedCost", event.target.value)}
+                onChange={(event) =>
+                  updateStep(step.id, "estimatedCost", event.target.value)
+                }
                 placeholder="Step cost"
                 disabled={!isLoggedIn}
                 className="rounded-[8px] bg-white"
               />
               <Textarea
                 value={step.description}
-                onChange={(event) => updateStep(step.id, "description", event.target.value)}
+                onChange={(event) =>
+                  updateStep(step.id, "description", event.target.value)
+                }
                 placeholder="Step description"
                 disabled={!isLoggedIn}
                 className="min-h-20 rounded-[8px] bg-white sm:col-span-2"
               />
               <Textarea
                 value={step.documents}
-                onChange={(event) => updateStep(step.id, "documents", event.target.value)}
+                onChange={(event) =>
+                  updateStep(step.id, "documents", event.target.value)
+                }
                 placeholder="Step documents, one per line"
                 disabled={!isLoggedIn}
                 className="min-h-20 rounded-[8px] bg-white"
               />
               <Textarea
                 value={step.tips}
-                onChange={(event) => updateStep(step.id, "tips", event.target.value)}
+                onChange={(event) =>
+                  updateStep(step.id, "tips", event.target.value)
+                }
                 placeholder="Tips, one per line"
                 disabled={!isLoggedIn}
                 className="min-h-20 rounded-[8px] bg-white"
@@ -360,14 +415,21 @@ export default function CreateTaskContributionForm() {
         disabled={isSubmitting || !isLoggedIn}
         className="mt-6 h-11 w-full rounded-[8px] bg-emerald-600 text-white hover:bg-emerald-700"
       >
-        {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+        {isSubmitting ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : (
+          <Send className="size-4" />
+        )}
         Submit task
       </Button>
 
       {createdTask ? (
         <div className="mt-4 rounded-[8px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
           <span className="font-semibold">{createdTask.title}</span> is live.{" "}
-          <Link href={`/tasks/${createdTask.slug}`} className="font-semibold underline">
+          <Link
+            href={`/tasks/${createdTask.slug}`}
+            className="font-semibold underline"
+          >
             View task
           </Link>
         </div>

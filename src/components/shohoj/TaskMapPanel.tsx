@@ -4,16 +4,23 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import type { LatLngExpression } from "leaflet";
 import { LocateFixed, MapPinned, Route, ShieldAlert } from "lucide-react";
-import type { TaskDetail, TaskLocation, RouteStop } from "@/lib/shohoj-path/mock-data";
+import type {
+  TaskDetail,
+  TaskLocation,
+  RouteStop,
+} from "@/lib/shohoj-path/mock-data";
 
-const DynamicMap = dynamic(() => import("@/src/components/shohoj/TaskMapView"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex min-h-[420px] items-center justify-center rounded-[28px] bg-slate-100 text-sm text-slate-500">
-      Loading map...
-    </div>
-  ),
-});
+const DynamicMap = dynamic(
+  () => import("@/src/components/shohoj/TaskMapView"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex min-h-[420px] items-center justify-center rounded-[28px] bg-slate-100 text-sm text-slate-500">
+        Loading map...
+      </div>
+    ),
+  },
+);
 
 const BANGLADESH_CENTER = { lat: 23.685, lng: 90.3563 };
 const BANGLADESH_ZOOM = 7;
@@ -50,9 +57,14 @@ export default function TaskMapPanel({
   description = "Live OpenStreetMap view showing your location or Bangladesh.",
   heightClassName = "min-h-[420px]",
 }: TaskMapPanelProps) {
-  const [userPosition, setUserPosition] = useState<UserPositionState | null>(null);
-  const [reverseGeocode, setReverseGeocode] = useState<ReverseGeocodeState | null>(null);
-  const [locationState, setLocationState] = useState<"loading" | "granted" | "denied" | "idle">(() => {
+  const [userPosition, setUserPosition] = useState<UserPositionState | null>(
+    null,
+  );
+  const [reverseGeocode, setReverseGeocode] =
+    useState<ReverseGeocodeState | null>(null);
+  const [locationState, setLocationState] = useState<
+    "loading" | "granted" | "denied" | "idle"
+  >(() => {
     if (typeof navigator !== "undefined" && !("geolocation" in navigator)) {
       return "denied";
     }
@@ -76,7 +88,7 @@ export default function TaskMapPanel({
 
       try {
         const response = await fetch(
-          `/api/location/reverse?lat=${nextPosition.lat}&lon=${nextPosition.lng}`
+          `/api/location/reverse?lat=${nextPosition.lat}&lon=${nextPosition.lng}`,
         );
         const result = await response.json();
 
@@ -95,11 +107,15 @@ export default function TaskMapPanel({
       setLocationState("denied");
     };
 
-    const watchId = navigator.geolocation.getCurrentPosition(onSuccess, onError, {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 300000,
-    });
+    const watchId = navigator.geolocation.getCurrentPosition(
+      onSuccess,
+      onError,
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000,
+      },
+    );
 
     return () => {
       void watchId;
@@ -114,14 +130,19 @@ export default function TaskMapPanel({
         ? ([userPosition.lat, userPosition.lng] as LatLngExpression)
         : ([BANGLADESH_CENTER.lat, BANGLADESH_CENTER.lng] as LatLngExpression);
 
-    const zoom = userPosition && locationState === "granted" ? 12 : BANGLADESH_ZOOM;
+    const zoom =
+      userPosition && locationState === "granted" ? 12 : BANGLADESH_ZOOM;
 
     // Only show routes if a task is provided
     const routePoints = task
       ? [
           {
             id: "user-location",
-            label: reverseGeocode?.area || (locationState === "granted" ? "Your current area" : "Bangladesh start"),
+            label:
+              reverseGeocode?.area ||
+              (locationState === "granted"
+                ? "Your current area"
+                : "Bangladesh start"),
             position: [start.lat, start.lng] as LatLngExpression,
             kind: "user" as const,
           },
@@ -131,14 +152,21 @@ export default function TaskMapPanel({
             .map((location, index) => ({
               id: location.id,
               label: `${index + 1}. ${location.name}`,
-              position: [location.coordinates.lat, location.coordinates.lng] as LatLngExpression,
+              position: [
+                location.coordinates.lat,
+                location.coordinates.lng,
+              ] as LatLngExpression,
               kind: "task" as const,
             })),
         ]
       : [
           {
             id: "user-location",
-            label: reverseGeocode?.area || (locationState === "granted" ? "Your current location" : "Bangladesh"),
+            label:
+              reverseGeocode?.area ||
+              (locationState === "granted"
+                ? "Your current location"
+                : "Bangladesh"),
             position: [start.lat, start.lng] as LatLngExpression,
             kind: "user" as const,
           },
@@ -175,7 +203,9 @@ export default function TaskMapPanel({
         />
       </div>
 
-      <div className={`grid gap-3 border-t border-slate-100 px-6 py-5 ${task ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+      <div
+        className={`grid gap-3 border-t border-slate-100 px-6 py-5 ${task ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+      >
         <div className="rounded-[24px] bg-slate-50 p-4">
           <div className="flex items-center gap-2">
             <LocateFixed className="size-4 text-emerald-700" />
@@ -193,10 +223,13 @@ export default function TaskMapPanel({
           <div className="rounded-[24px] bg-slate-50 p-4">
             <div className="flex items-center gap-2">
               <Route className="size-4 text-emerald-700" />
-              <p className="text-sm font-semibold text-slate-900">Route stops</p>
+              <p className="text-sm font-semibold text-slate-900">
+                Route stops
+              </p>
             </div>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              {task.route.length} mapped stops connected in task order for quick trip planning.
+              {task.route.length} mapped stops connected in task order for quick
+              trip planning.
             </p>
           </div>
         )}
@@ -218,7 +251,10 @@ export default function TaskMapPanel({
 
       {reverseGeocode?.fullAddress ? (
         <div className="border-t border-slate-100 px-6 py-4 text-sm text-slate-600">
-          <span className="font-semibold text-slate-900">Detected address area:</span> {reverseGeocode.fullAddress}
+          <span className="font-semibold text-slate-900">
+            Detected address area:
+          </span>{" "}
+          {reverseGeocode.fullAddress}
         </div>
       ) : null}
     </article>

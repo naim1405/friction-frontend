@@ -4,7 +4,7 @@ import { getRouteSummary } from "@/lib/shohoj-path/mock-data";
 
 export async function GET(
   _request: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
   const task = await getFrontendTask(slug).catch(() => null);
@@ -12,7 +12,7 @@ export async function GET(
   if (!task) {
     return NextResponse.json(
       { success: false, message: "Task not found" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 

@@ -21,7 +21,8 @@ interface TaskContributionFormProps {
 }
 
 async function postBackend<TPayload>(endpoint: string, payload: TPayload) {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000/api";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000/api";
   const token = getAccessToken();
 
   const response = await fetch(`${baseUrl}${endpoint}`, {
@@ -43,7 +44,9 @@ async function postBackend<TPayload>(endpoint: string, payload: TPayload) {
   return result;
 }
 
-export default function TaskContributionForm({ task }: TaskContributionFormProps) {
+export default function TaskContributionForm({
+  task,
+}: TaskContributionFormProps) {
   const { user } = useUserSlice();
   const isLoggedIn = Boolean(user.userId);
   const [selectedStepId, setSelectedStepId] = useState(task.steps[0]?.id ?? "");
@@ -53,7 +56,7 @@ export default function TaskContributionForm({ task }: TaskContributionFormProps
 
   const selectedStep = useMemo(
     () => task.steps.find((step) => step.id === selectedStepId),
-    [selectedStepId, task.steps]
+    [selectedStepId, task.steps],
   );
 
   const submitComment = async () => {
@@ -77,7 +80,9 @@ export default function TaskContributionForm({ task }: TaskContributionFormProps
       setContent("");
       toast.success(result.message || "Comment submitted successfully.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to submit comment.");
+      toast.error(
+        error instanceof Error ? error.message : "Unable to submit comment.",
+      );
     } finally {
       setIsCommenting(false);
     }
@@ -103,7 +108,9 @@ export default function TaskContributionForm({ task }: TaskContributionFormProps
 
       toast.success(result.message || "Vote submitted successfully.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to submit vote.");
+      toast.error(
+        error instanceof Error ? error.message : "Unable to submit vote.",
+      );
     } finally {
       setIsVoting(false);
     }
@@ -113,7 +120,9 @@ export default function TaskContributionForm({ task }: TaskContributionFormProps
     <section className="rounded-[8px] border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-slate-950">Contribute to this task</h2>
+          <h2 className="text-lg font-semibold text-slate-950">
+            Contribute to this task
+          </h2>
           <p className="mt-1 text-sm text-slate-600">
             Share a comment or upvote the most useful step.
           </p>
@@ -125,7 +134,11 @@ export default function TaskContributionForm({ task }: TaskContributionFormProps
           disabled={isVoting || !isLoggedIn}
           className="h-10 rounded-[8px]"
         >
-          {isVoting ? <Loader2 className="size-4 animate-spin" /> : <ThumbsUp className="size-4" />}
+          {isVoting ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <ThumbsUp className="size-4" />
+          )}
           Upvote
         </Button>
       </div>
@@ -146,7 +159,10 @@ export default function TaskContributionForm({ task }: TaskContributionFormProps
 
         {selectedStep ? (
           <p className="rounded-[8px] bg-slate-50 px-3 py-2 text-sm text-slate-600">
-            Selected: <span className="font-medium text-slate-900">{selectedStep.title}</span>
+            Selected:{" "}
+            <span className="font-medium text-slate-900">
+              {selectedStep.title}
+            </span>
           </p>
         ) : null}
 

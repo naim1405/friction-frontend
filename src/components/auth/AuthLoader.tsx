@@ -10,7 +10,9 @@ export default function AuthLoader() {
           <ShieldCheck className="size-7" />
         </div>
 
-        <h1 className="mt-5 text-xl font-semibold text-slate-900">Checking your session</h1>
+        <h1 className="mt-5 text-xl font-semibold text-slate-900">
+          Checking your session
+        </h1>
         <p className="mt-2 text-sm text-slate-600">
           Verifying authentication and refreshing access token securely.
         </p>

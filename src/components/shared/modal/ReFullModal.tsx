@@ -43,13 +43,13 @@ export function ReFullModal({
         {(title || description) && (
           <DialogHeader>
             {title && <DialogTitle>{title}</DialogTitle>}
-            {description && <DialogDescription>{description}</DialogDescription>}
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
           </DialogHeader>
         )}
 
-        <div className="flex-1 overflow-y-auto py-4">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto py-4">{children}</div>
 
         {footer && <DialogFooter>{footer}</DialogFooter>}
       </DialogContent>

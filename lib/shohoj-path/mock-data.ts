@@ -126,7 +126,8 @@ export const backendContracts: BackendEndpointContract[] = [
     method: "GET",
     path: "/api/v1/tasks",
     authRequired: false,
-    description: "Return task cards and their ordered steps from the backend database.",
+    description:
+      "Return task cards and their ordered steps from the backend database.",
     responseExample: {
       success: true,
       data: [{ slug: "apply-passport", title: "Apply for a Passport" }],
@@ -136,7 +137,8 @@ export const backendContracts: BackendEndpointContract[] = [
     method: "GET",
     path: "/api/v1/tasks/:idOrSlug",
     authRequired: false,
-    description: "Return one task workflow with steps, documents, and linked locations.",
+    description:
+      "Return one task workflow with steps, documents, and linked locations.",
     responseExample: {
       success: true,
       data: { slug: "apply-passport", steps: [] },
@@ -146,7 +148,8 @@ export const backendContracts: BackendEndpointContract[] = [
     method: "GET",
     path: "/api/v1/locations",
     authRequired: false,
-    description: "Return seeded places such as government offices, banks, and support services.",
+    description:
+      "Return seeded places such as government offices, banks, and support services.",
     responseExample: {
       success: true,
       data: [{ name: "Agargaon Passport Office", city: "Dhaka" }],
@@ -186,7 +189,7 @@ export function getRouteSummary(route: RouteStop[]) {
   const totalDistanceKm = route.reduce((sum, stop) => sum + stop.distanceKm, 0);
   const totalTravelMinutes = route.reduce(
     (sum, stop) => sum + stop.travelMinutes,
-    0
+    0,
   );
 
   return {

@@ -24,9 +24,12 @@ export default function ContributionGate({
             <MessageSquarePlus className="size-5" />
           </span>
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-slate-900">Contribute & improve</h3>
+            <h3 className="text-lg font-semibold text-slate-900">
+              Contribute & improve
+            </h3>
             <p className="text-sm leading-6 text-slate-600">
-              You are signed in, so you can share real-world experience, suggest better steps, and help improve{" "}
+              You are signed in, so you can share real-world experience, suggest
+              better steps, and help improve{" "}
               <span className="font-semibold text-slate-900">{taskTitle}</span>.
             </p>
           </div>
@@ -50,9 +53,12 @@ export default function ContributionGate({
           <LockKeyhole className="size-5" />
         </span>
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-slate-900">Login required to contribute</h3>
+          <h3 className="text-lg font-semibold text-slate-900">
+            Login required to contribute
+          </h3>
           <p className="text-sm leading-6 text-slate-600">
-            Anyone can browse task guidance, but contributions for <span className="font-semibold text-slate-900">{taskTitle}</span>{" "}
+            Anyone can browse task guidance, but contributions for{" "}
+            <span className="font-semibold text-slate-900">{taskTitle}</span>{" "}
             require an account so community insights stay trustworthy.
           </p>
         </div>

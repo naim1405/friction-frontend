@@ -20,9 +20,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         data-lt-installed={true}
       >
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

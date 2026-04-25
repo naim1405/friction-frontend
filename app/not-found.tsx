@@ -13,7 +13,6 @@ export default function NotFound() {
       <div className="pointer-events-none absolute inset-0 bg-blue-50" />
 
       <section className="relative mx-auto w-full max-w-5xl gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8 ">
-        
         <div className="space-y-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-red-700">
             <SearchX className="size-3.5" />
@@ -25,8 +24,8 @@ export default function NotFound() {
               This page does not exist.
             </h1>
             <p className="max-w-2xl text-sm text-slate-600 sm:text-base">
-              The URL may be incorrect, or the content was moved to a different route.
-              Use one of the actions below to continue.
+              The URL may be incorrect, or the content was moved to a different
+              route. Use one of the actions below to continue.
             </p>
           </div>
 

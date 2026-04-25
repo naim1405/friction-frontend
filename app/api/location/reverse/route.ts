@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   if (!lat || !lon) {
     return NextResponse.json(
       { success: false, message: "lat and lon are required." },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -32,13 +32,13 @@ export async function GET(request: NextRequest) {
         "User-Agent": "ShohojPathFrontend/1.0",
       },
       next: { revalidate: 300 },
-    }
+    },
   );
 
   if (!response.ok) {
     return NextResponse.json(
       { success: false, message: "Reverse geocoding failed." },
-      { status: 502 }
+      { status: 502 },
     );
   }
 

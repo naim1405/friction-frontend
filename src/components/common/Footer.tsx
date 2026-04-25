@@ -24,7 +24,9 @@ const Footer = () => {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Quick Links</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Quick Links
+            </h3>
             <div className="grid gap-2 text-sm">
               <Link href="/" className="transition hover:text-white">
                 Home
@@ -36,7 +38,10 @@ const Footer = () => {
                 Community
               </Link>
               {isLoggedIn ? (
-                <Link href="/contribute" className="transition hover:text-white">
+                <Link
+                  href="/contribute"
+                  className="transition hover:text-white"
+                >
                   Contribute
                 </Link>
               ) : (
@@ -48,7 +53,9 @@ const Footer = () => {
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Contact</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Contact
+            </h3>
             <div className="space-y-2 text-sm text-slate-300">
               <p className="inline-flex items-center gap-2">
                 <Mail className="size-4" />
@@ -64,7 +71,10 @@ const Footer = () => {
 
         <div className="mt-8 flex flex-col gap-2 border-t border-slate-800 pt-4 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Kivabe Kori?. All rights reserved.</p>
-          <p>Built to make everyday public tasks clearer, faster, and more navigable.</p>
+          <p>
+            Built to make everyday public tasks clearer, faster, and more
+            navigable.
+          </p>
         </div>
       </div>
     </footer>

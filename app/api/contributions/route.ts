@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         success: false,
         message: "Authentication required to submit contribution.",
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         success: false,
         message: "taskSlug, type, and comment are required.",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -52,6 +52,6 @@ export async function POST(request: NextRequest) {
         received: body,
       },
     },
-    { status: 201 }
+    { status: 201 },
   );
 }

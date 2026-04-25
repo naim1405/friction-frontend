@@ -123,7 +123,11 @@ function toTaskCategory(category?: string | null): TaskCategory {
 }
 
 function toDifficulty(difficulty?: string | null): TaskDetail["difficulty"] {
-  if (difficulty === "Easy" || difficulty === "Moderate" || difficulty === "Complex") {
+  if (
+    difficulty === "Easy" ||
+    difficulty === "Moderate" ||
+    difficulty === "Complex"
+  ) {
     return difficulty;
   }
 
@@ -168,7 +172,7 @@ function toTaskLocation(location: BackendLocation): TaskLocation {
 
 function findLocation(
   locationId: string | null | undefined,
-  locations: BackendLocation[]
+  locations: BackendLocation[],
 ) {
   if (!locationId) {
     return undefined;
@@ -182,7 +186,8 @@ function toTaskStep(step: BackendStep): TaskStep {
     id: step.id,
     order: step.order,
     title: step.title,
-    description: step.description || "Follow this step to continue the task workflow.",
+    description:
+      step.description || "Follow this step to continue the task workflow.",
     duration: step.estimatedTime || "Time not provided",
     documents: step.documents ?? [],
     fee: step.estimatedCost ?? undefined,
@@ -196,9 +201,12 @@ function moneyTotal(steps: BackendStep[]) {
   return steps.reduce((sum, step) => sum + Number(step.estimatedCost ?? 0), 0);
 }
 
-function toTaskDetail(task: BackendTask, locations: BackendLocation[]): TaskDetail {
+function toTaskDetail(
+  task: BackendTask,
+  locations: BackendLocation[],
+): TaskDetail {
   const backendSteps = [...(task.steps ?? [])].sort(
-    (left, right) => left.order - right.order
+    (left, right) => left.order - right.order,
   );
   const steps = backendSteps.map(toTaskStep);
   const linkedLocations = backendSteps
@@ -206,7 +214,9 @@ function toTaskDetail(task: BackendTask, locations: BackendLocation[]): TaskDeta
     .filter((location): location is BackendLocation => Boolean(location))
     .map(toTaskLocation);
   const taskLocations = Array.from(
-    new Map(linkedLocations.map((location) => [location.id, location])).values()
+    new Map(
+      linkedLocations.map((location) => [location.id, location]),
+    ).values(),
   );
   const route = taskLocations.map((location, index) => ({
     stepOrder: steps[index]?.order ?? index + 1,
@@ -241,7 +251,8 @@ function toTaskDetail(task: BackendTask, locations: BackendLocation[]): TaskDeta
     route,
     reviews: [],
     aiSummary: task.aiSummary || task.summary || task.description || "",
-    communityTip: task.communityTip || "Community updates will appear as users contribute.",
+    communityTip:
+      task.communityTip || "Community updates will appear as users contribute.",
   };
 }
 
@@ -291,7 +302,7 @@ export async function getCommunityInsights(): Promise<CommunityInsight[]> {
 export async function getStepComments(stepId: string) {
   try {
     const result = await backendFetch<BackendComment[]>(
-      `/comments?stepId=${stepId}&limit=20`
+      `/comments?stepId=${stepId}&limit=20`,
     );
     return result.data;
   } catch {

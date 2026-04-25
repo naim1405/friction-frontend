@@ -4,7 +4,9 @@ interface TaskSearchFormProps {
   defaultValue?: string;
 }
 
-export default function TaskSearchForm({ defaultValue = "" }: TaskSearchFormProps) {
+export default function TaskSearchForm({
+  defaultValue = "",
+}: TaskSearchFormProps) {
   return (
     <form
       action="/search"
@@ -15,7 +17,10 @@ export default function TaskSearchForm({ defaultValue = "" }: TaskSearchFormProp
           <Search className="size-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <label htmlFor="task-query" className="block text-sm font-semibold text-slate-900">
+          <label
+            htmlFor="task-query"
+            className="block text-sm font-semibold text-slate-900"
+          >
             What task do you want to complete?
           </label>
           <input
@@ -26,7 +31,8 @@ export default function TaskSearchForm({ defaultValue = "" }: TaskSearchFormProp
             className="mt-1 w-full border-none bg-transparent text-base text-slate-700 outline-none placeholder:text-slate-400"
           />
           <p className="mt-1 text-xs text-slate-500">
-            AI maps your intent to a task, then shows the best steps, locations, and route.
+            AI maps your intent to a task, then shows the best steps, locations,
+            and route.
           </p>
         </div>
       </div>

@@ -29,7 +29,11 @@ const Navbar = () => {
       await handleLogout();
       toast.success("Logged out successfully.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Server logout failed, but local session was cleared.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Server logout failed, but local session was cleared.",
+      );
     } finally {
       clearAuthTokens();
       clearUser();
@@ -47,8 +51,12 @@ const Navbar = () => {
             <Sparkles className="size-4" />
           </span>
           <span>
-            <span className="block text-[11px] font-semibold text-emerald-700">Lunch er agei hobe.</span>
-            <span className="block text-base font-semibold text-slate-900">Kivabe Kori?</span>
+            <span className="block text-[11px] font-semibold text-emerald-700">
+              Lunch er agei hobe.
+            </span>
+            <span className="block text-base font-semibold text-slate-900">
+              Kivabe Kori?
+            </span>
           </span>
         </Link>
 

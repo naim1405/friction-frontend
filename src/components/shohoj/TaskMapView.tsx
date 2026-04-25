@@ -3,7 +3,15 @@
 import { useEffect } from "react";
 import type { LatLngExpression } from "leaflet";
 import L from "leaflet";
-import { MapContainer, Marker, Pane, Polyline, TileLayer, Tooltip, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Pane,
+  Polyline,
+  TileLayer,
+  Tooltip,
+  useMap,
+} from "react-leaflet";
 
 interface RoutePoint {
   id: string;
@@ -46,7 +54,13 @@ function createMarkerIcon(kind: RoutePoint["kind"], label: string) {
   });
 }
 
-function MapViewport({ center, zoom }: { center: LatLngExpression; zoom: number }) {
+function MapViewport({
+  center,
+  zoom,
+}: {
+  center: LatLngExpression;
+  zoom: number;
+}) {
   const map = useMap();
 
   useEffect(() => {
@@ -92,13 +106,18 @@ export default function TaskMapView({
         <Marker
           key={point.id}
           position={point.position}
-          icon={createMarkerIcon(point.kind, point.kind === "user" ? "You" : `${index}`)}
+          icon={createMarkerIcon(
+            point.kind,
+            point.kind === "user" ? "You" : `${index}`,
+          )}
         >
           <Tooltip direction="top" offset={[0, -18]} opacity={1}>
             <div className="space-y-1">
               <p className="font-semibold text-slate-900">{point.label}</p>
               <p className="text-xs text-slate-500">
-                {point.kind === "user" ? "Current/default starting point" : "Task location"}
+                {point.kind === "user"
+                  ? "Current/default starting point"
+                  : "Task location"}
               </p>
             </div>
           </Tooltip>
