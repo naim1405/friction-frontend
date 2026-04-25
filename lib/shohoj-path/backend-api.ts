@@ -71,7 +71,8 @@ type BackendLocation = {
 
 type BackendComment = {
   id: string;
-  stepId: string;
+  taskId?: string;
+  stepId?: string;
   userId: string;
   content: string;
   createdAt?: string;
@@ -83,6 +84,15 @@ type BackendVote = {
   stepId: string;
   userId: string;
   value: number;
+};
+
+export type FrontendTaskComment = {
+  id: string;
+  taskId: string;
+  userId: string;
+  content: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 const DEFAULT_BACKEND_URL = "http://localhost:5000/api/v1";
@@ -305,6 +315,47 @@ export async function getStepComments(stepId: string) {
       `/comments?stepId=${stepId}&limit=20`,
     );
     return result.data;
+  } catch {
+    return [];
+  }
+}
+
+export async function getTaskComments(taskId: string): Promise<FrontendTaskComment[]> {
+  const normalizeComments = (comments: BackendComment[]) =>
+    comments
+      .filter((comment) => !comment.taskId || comment.taskId === taskId)
+      .map((comment) => ({
+        id: comment.id,
+        taskId: comment.taskId || taskId,
+        userId: comment.userId,
+        content: comment.content,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+      }))
+      .sort((left, right) => {
+        const leftTime = left.createdAt ? new Date(left.createdAt).getTime() : 0;
+        const rightTime = right.createdAt ? new Date(right.createdAt).getTime() : 0;
+        return rightTime - leftTime;
+      });
+
+  try {
+    const result = await backendFetch<BackendComment[]>(
+      `/comments?taskId=${taskId}&limit=20`,
+    );
+    const normalized = normalizeComments(result.data);
+
+    if (normalized.length > 0) {
+      return normalized;
+    }
+  } catch {
+    // Fallback to support backends that still expect `tastId` typo.
+  }
+
+  try {
+    const fallback = await backendFetch<BackendComment[]>(
+      `/comments?tastId=${taskId}&limit=20`,
+    );
+    return normalizeComments(fallback.data);
   } catch {
     return [];
   }

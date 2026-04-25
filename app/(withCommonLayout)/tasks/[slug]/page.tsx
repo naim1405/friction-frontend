@@ -12,6 +12,7 @@ import ContributionGate from "@/src/components/shohoj/ContributionGate";
 import TaskMapPanel from "@/src/components/shohoj/TaskMapPanel";
 import TaskContributionForm from "@/src/components/shohoj/TaskContributionForm";
 import {
+  getTaskComments,
   getFrontendTask,
   getFrontendTasks,
 } from "@/lib/shohoj-path/backend-api";
@@ -29,6 +30,7 @@ export default async function TaskDetailPage({
     notFound();
   }
 
+  const taskComments = await getTaskComments(task.id);
   const routeSummary = getRouteSummary(task.route);
   const relatedTasks = (await getFrontendTasks())
     .filter((relatedTask) => relatedTask.id !== task.id)
@@ -164,42 +166,6 @@ export default async function TaskDetailPage({
             </div>
           </article>
 
-          <article className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-[26px] bg-emerald-50 p-5">
-                <div className="flex items-center gap-3">
-                  <Bot className="size-5 text-emerald-700" />
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    AI summary
-                  </h2>
-                </div>
-                <p className="mt-3 text-sm leading-6 text-slate-700">
-                  {task.aiSummary}
-                </p>
-              </div>
-              <div className="rounded-[26px] bg-amber-50 p-5">
-                <div className="flex items-center gap-3">
-                  <MessageSquare className="size-5 text-amber-700" />
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    Community tip
-                  </h2>
-                </div>
-                <p className="mt-3 text-sm leading-6 text-slate-700">
-                  {task.communityTip}
-                </p>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <div className="space-y-6">
-          <TaskMapPanel
-            task={task}
-            title="Interactive route preview"
-            description="Live OpenStreetMap route panel showing current area when location permission is available."
-            heightClassName="min-h-[520px]"
-          />
-
           <article className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-[24px] bg-slate-50 p-4">
@@ -274,9 +240,45 @@ export default async function TaskDetailPage({
             </div>
           </article>
 
+          <article className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-[26px] bg-emerald-50 p-5">
+                <div className="flex items-center gap-3">
+                  <Bot className="size-5 text-emerald-700" />
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    AI summary
+                  </h2>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-slate-700">
+                  {task.aiSummary}
+                </p>
+              </div>
+              <div className="rounded-[26px] bg-amber-50 p-5">
+                <div className="flex items-center gap-3">
+                  <MessageSquare className="size-5 text-amber-700" />
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    Community tip
+                  </h2>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-slate-700">
+                  {task.communityTip}
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div className="space-y-6">
+          <TaskMapPanel
+            task={task}
+            title="Interactive route preview"
+            description="Live OpenStreetMap route panel showing current area when location permission is available."
+            heightClassName="min-h-[520px]"
+          />
+
           <ContributionGate taskSlug={task.slug} taskTitle={task.title} />
 
-          <TaskContributionForm task={task} />
+          <TaskContributionForm task={task} comments={taskComments} />
 
           <article className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4">

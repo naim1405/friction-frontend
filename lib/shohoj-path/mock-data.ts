@@ -159,9 +159,9 @@ export const backendContracts: BackendEndpointContract[] = [
     method: "POST",
     path: "/api/v1/comments",
     authRequired: true,
-    description: "Create a community comment for a task step.",
+    description: "Create a community comment for a task.",
     requestExample: {
-      stepId: "backend-step-id",
+      taskId: "backend-task-id",
       content: "The queue was shorter before lunch.",
     },
     responseExample: {

@@ -1,23 +1,33 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Loader2, MessageSquarePlus, ThumbsUp } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2, MessageSquarePlus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import type { TaskDetail } from "@/lib/shohoj-path/mock-data";
+import type { FrontendTaskComment } from "@/lib/shohoj-path/backend-api";
 import useUserSlice from "@/src/redux/features/user/useUserSlice";
 import { getAccessToken } from "@/src/utils/authTokens";
 
 interface TaskContributionFormProps {
   task: TaskDetail;
+  comments: FrontendTaskComment[];
+}
+
+function formatCommentDate(value?: string) {
+  if (!value) {
+    return "Recently";
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "Recently";
+  }
+
+  return parsed.toLocaleString();
 }
 
 async function postBackend<TPayload>(endpoint: string, payload: TPayload) {
@@ -46,18 +56,13 @@ async function postBackend<TPayload>(endpoint: string, payload: TPayload) {
 
 export default function TaskContributionForm({
   task,
+  comments,
 }: TaskContributionFormProps) {
+  const router = useRouter();
   const { user } = useUserSlice();
   const isLoggedIn = Boolean(user.userId);
-  const [selectedStepId, setSelectedStepId] = useState(task.steps[0]?.id ?? "");
   const [content, setContent] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
-  const [isVoting, setIsVoting] = useState(false);
-
-  const selectedStep = useMemo(
-    () => task.steps.find((step) => step.id === selectedStepId),
-    [selectedStepId, task.steps],
-  );
 
   const submitComment = async () => {
     if (!isLoggedIn) {
@@ -65,20 +70,21 @@ export default function TaskContributionForm({
       return;
     }
 
-    if (!selectedStepId || !content.trim()) {
-      toast.error("Select a step and write your experience first.");
+    if (!content.trim()) {
+      toast.error("Write your experience first.");
       return;
     }
 
     try {
       setIsCommenting(true);
       const result = await postBackend("/comments", {
-        stepId: selectedStepId,
+        taskId: task.id,
         content: content.trim(),
       });
 
       setContent("");
       toast.success(result.message || "Comment submitted successfully.");
+      router.refresh();
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Unable to submit comment.",
@@ -88,88 +94,24 @@ export default function TaskContributionForm({
     }
   };
 
-  const submitVote = async () => {
-    if (!isLoggedIn) {
-      toast.error("Please login before voting.");
-      return;
-    }
-
-    if (!selectedStepId) {
-      toast.error("Select a step first.");
-      return;
-    }
-
-    try {
-      setIsVoting(true);
-      const result = await postBackend("/votes", {
-        stepId: selectedStepId,
-        value: 1,
-      });
-
-      toast.success(result.message || "Vote submitted successfully.");
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Unable to submit vote.",
-      );
-    } finally {
-      setIsVoting(false);
-    }
-  };
-
   return (
     <section className="rounded-[8px] border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div>
         <div>
           <h2 className="text-lg font-semibold text-slate-950">
             Contribute to this task
           </h2>
           <p className="mt-1 text-sm text-slate-600">
-            Share a comment or upvote the most useful step.
+            Share your experience to help others complete this task.
           </p>
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={submitVote}
-          disabled={isVoting || !isLoggedIn}
-          className="h-10 rounded-[8px]"
-        >
-          {isVoting ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <ThumbsUp className="size-4" />
-          )}
-          Upvote
-        </Button>
       </div>
 
       <div className="mt-5 space-y-4">
-        <Select value={selectedStepId} onValueChange={setSelectedStepId}>
-          <SelectTrigger className="h-11 rounded-[8px]">
-            <SelectValue placeholder="Select a step" />
-          </SelectTrigger>
-          <SelectContent>
-            {task.steps.map((step) => (
-              <SelectItem key={step.id} value={step.id}>
-                {step.order}. {step.title}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {selectedStep ? (
-          <p className="rounded-[8px] bg-slate-50 px-3 py-2 text-sm text-slate-600">
-            Selected:{" "}
-            <span className="font-medium text-slate-900">
-              {selectedStep.title}
-            </span>
-          </p>
-        ) : null}
-
         <Textarea
           value={content}
           onChange={(event) => setContent(event.target.value)}
-          placeholder="Share what happened, what documents were needed, or what route worked best..."
+          placeholder="Share your experience on this task so others can learn from it..."
           className="min-h-28 rounded-[8px]"
           disabled={!isLoggedIn}
         />
@@ -187,6 +129,33 @@ export default function TaskContributionForm({
           )}
           Submit comment
         </Button>
+
+        <div className="rounded-[8px] border border-slate-200 bg-slate-50 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-semibold text-slate-900">Recent comments</p>
+            <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-600">
+              {comments.length}
+            </span>
+          </div>
+
+          {comments.length > 0 ? (
+            <div className="mt-3 space-y-2.5">
+              {comments.map((comment) => (
+                <div key={comment.id} className="rounded-[8px] bg-white p-3">
+                  <p className="text-sm leading-6 text-slate-700">{comment.content}</p>
+                  <div className="mt-2 flex items-center justify-between gap-3 text-xs text-slate-500">
+                    <span>User {comment.userId.slice(0, 8)}</span>
+                    <span>{formatCommentDate(comment.createdAt)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 text-sm text-slate-600">
+              No comments yet. Be the first to add one.
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );
