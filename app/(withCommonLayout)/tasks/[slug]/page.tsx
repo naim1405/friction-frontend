@@ -12,11 +12,11 @@ import ContributionGate from "@/src/components/shohoj/ContributionGate";
 import TaskMapPanel from "@/src/components/shohoj/TaskMapPanel";
 import TaskContributionForm from "@/src/components/shohoj/TaskContributionForm";
 import {
+  getRouteSummary,
   getTaskComments,
   getFrontendTask,
   getFrontendTasks,
 } from "@/lib/shohoj-path/backend-api";
-import { getRouteSummary } from "@/lib/shohoj-path/mock-data";
 
 export default async function TaskDetailPage({
   params,

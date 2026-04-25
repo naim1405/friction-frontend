@@ -1,14 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  return NextResponse.json({
-    success: true,
-    data: {
-      id: "mock-user-1",
-      name: "Tanvir Hasan",
-      email: "tanvir@example.com",
-      points: 120,
-      contributionLevel: "Level 4 Contributor",
+const BACKEND_BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000/api/v1";
+
+export async function GET(request: NextRequest) {
+  const token = request.cookies.get("accessToken")?.value;
+
+  const response = await fetch(`${BACKEND_BASE_URL}/me`, {
+    cache: "no-store",
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
+  });
+
+  const result = await response.json().catch(() => null);
+
+  return NextResponse.json(result ?? { success: false, data: null }, {
+    status: response.status,
   });
 }

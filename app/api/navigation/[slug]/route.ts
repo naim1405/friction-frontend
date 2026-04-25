@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getFrontendTask } from "@/lib/shohoj-path/backend-api";
-import { getRouteSummary } from "@/lib/shohoj-path/mock-data";
+import { getFrontendTask, getRouteSummary } from "@/lib/shohoj-path/backend-api";
 
 export async function GET(
   _request: Request,

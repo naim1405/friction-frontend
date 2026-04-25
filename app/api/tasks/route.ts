@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getFrontendTasks } from "@/lib/shohoj-path/backend-api";
 
-export async function GET() {
-  const tasks = await getFrontendTasks();
+export async function GET(request: NextRequest) {
+  const query = request.nextUrl.searchParams.get("q")?.trim() || "";
+  const tasks = await getFrontendTasks(query);
 
   return NextResponse.json({
     success: true,

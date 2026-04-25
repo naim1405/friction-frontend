@@ -8,7 +8,7 @@ import type {
   TaskDetail,
   TaskLocation,
   RouteStop,
-} from "@/lib/shohoj-path/mock-data";
+} from "@/lib/shohoj-path/backend-api";
 
 const DynamicMap = dynamic(
   () => import("@/src/components/shohoj/TaskMapView"),

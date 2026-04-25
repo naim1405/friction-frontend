@@ -1,10 +1,90 @@
-import type {
-  CommunityInsight,
-  TaskCategory,
-  TaskDetail,
-  TaskLocation,
-  TaskStep,
-} from "@/lib/shohoj-path/mock-data";
+export type TaskCategory =
+  | "Government Service"
+  | "Banking"
+  | "Education"
+  | "Citizen Support";
+
+export interface TaskLocation {
+  id: string;
+  name: string;
+  category: "Government" | "Bank" | "University" | "Other";
+  address: string;
+  area: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  officeHours: string;
+}
+
+export interface TaskStep {
+  id: string;
+  order: number;
+  title: string;
+  description: string;
+  duration: string;
+  documents: string[];
+  fee?: number;
+  tips: string[];
+  contributionLocked: boolean;
+  locationId?: string;
+}
+
+export interface TaskReview {
+  id: string;
+  user: string;
+  role: string;
+  comment: string;
+  upvotes: number;
+  createdAt: string;
+}
+
+export interface RouteStop {
+  stepOrder: number;
+  label: string;
+  distanceKm: number;
+  travelMinutes: number;
+  locationId?: string;
+}
+
+export interface TaskSummary {
+  id: string;
+  slug: string;
+  title: string;
+  tagline: string;
+  category: TaskCategory;
+  summary: string;
+  documentsCount: number;
+  stepsCount: number;
+  locationsCount: number;
+  estimatedDays: string;
+  estimatedCostBdt: number;
+  difficulty: "Easy" | "Moderate" | "Complex";
+  reviewCount: number;
+  savedCount: number;
+  popularityScore: number;
+  heroGradient: string;
+  coverLabel: string;
+}
+
+export interface TaskDetail extends TaskSummary {
+  documents: string[];
+  steps: TaskStep[];
+  locations: TaskLocation[];
+  route: RouteStop[];
+  reviews: TaskReview[];
+  aiSummary: string;
+  communityTip: string;
+}
+
+export interface CommunityInsight {
+  id: string;
+  title: string;
+  body: string;
+  upvotes: number;
+  taskSlug: string;
+  tag: string;
+}
 
 type BackendResponse<T> = {
   statusCode?: number;
@@ -307,6 +387,19 @@ export async function getCommunityInsights(): Promise<CommunityInsight[]> {
     taskSlug: task.slug,
     tag: task.category,
   }));
+}
+
+export function getRouteSummary(route: RouteStop[]) {
+  const totalDistanceKm = route.reduce((sum, stop) => sum + stop.distanceKm, 0);
+  const totalTravelMinutes = route.reduce(
+    (sum, stop) => sum + stop.travelMinutes,
+    0,
+  );
+
+  return {
+    totalDistanceKm: Number(totalDistanceKm.toFixed(1)),
+    totalTravelMinutes,
+  };
 }
 
 export async function getStepComments(stepId: string) {

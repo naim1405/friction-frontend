@@ -17,7 +17,7 @@ This frontend includes mocked route handlers under `app/api/*` and a machine-rea
 
 - Browsing tasks, search, route previews, and community insights should be public.
 - Posting contributions should require authentication.
-- The frontend mock uses header `x-mock-user-id` to demonstrate protected contribution submission.
+- Protected contribution submission should be authenticated by backend-issued tokens.
 
 ## Data expectations
 
@@ -28,5 +28,5 @@ This frontend includes mocked route handlers under `app/api/*` and a machine-rea
 ## Handoff files
 
 - Contract JSON: `public/contracts/shohoj-path-backend-contract.json`
-- Mock source of truth: `lib/shohoj-path/mock-data.ts`
+- Frontend should use backend API responses as the source of truth for task data.
 - Human-readable in-app spec page: `/api-spec`

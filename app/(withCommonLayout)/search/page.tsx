@@ -1,15 +1,120 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { SearchX } from "lucide-react";
 import TaskSearchForm from "@/src/components/shohoj/TaskSearchForm";
-import { getFrontendTasks } from "@/lib/shohoj-path/backend-api";
+import type { TaskSummary } from "@/lib/shohoj-path/backend-api";
 
-export default async function SearchPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
-  const { q = "" } = await searchParams;
-  const results = await getFrontendTasks(q);
+type BackendTasksResponse = {
+  success: boolean;
+  data: Array<{
+    id: string;
+    slug?: string;
+    title: string;
+    tagline?: string | null;
+    category?: string | null;
+    summary?: string | null;
+    description?: string | null;
+    estimatedDays?: string | null;
+    estimatedCostBdt?: number | null;
+    difficulty?: "Easy" | "Moderate" | "Complex" | string | null;
+    reviewCount?: number;
+    savedCount?: number;
+    popularityScore?: number;
+    coverLabel?: string | null;
+    documents?: string[];
+    steps?: unknown[];
+  }>;
+};
+
+const BACKEND_BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000/api/v1";
+
+function toTaskSummary(task: BackendTasksResponse["data"][number]): TaskSummary {
+  const normalizedDifficulty =
+    task.difficulty === "Easy" ||
+    task.difficulty === "Moderate" ||
+    task.difficulty === "Complex"
+      ? task.difficulty
+      : "Moderate";
+
+  return {
+    id: task.id,
+    slug: task.slug || task.id,
+    title: task.title,
+    tagline: task.tagline || task.summary || task.description || task.title,
+    category:
+      task.category === "Government Service" ||
+      task.category === "Banking" ||
+      task.category === "Education" ||
+      task.category === "Citizen Support"
+        ? task.category
+        : "Citizen Support",
+    summary: task.summary || task.description || task.tagline || "",
+    documentsCount: task.documents?.length ?? 0,
+    stepsCount: task.steps?.length ?? 0,
+    locationsCount: 0,
+    estimatedDays: task.estimatedDays || "Time varies",
+    estimatedCostBdt: task.estimatedCostBdt ?? 0,
+    difficulty: normalizedDifficulty,
+    reviewCount: task.reviewCount ?? 0,
+    savedCount: task.savedCount ?? 0,
+    popularityScore: task.popularityScore ?? 0,
+    heroGradient: "from-emerald-500 via-green-500 to-lime-500",
+    coverLabel: task.coverLabel || task.category || "Task",
+  };
+}
+
+export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const q = searchParams.get("q")?.trim() || "";
+  const [results, setResults] = useState<TaskSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadResults = async () => {
+      try {
+        setIsLoading(true);
+
+        const query = new URLSearchParams({ limit: "50" });
+
+        if (q) {
+          query.set("searchTerm", q);
+        }
+
+        const response = await fetch(`${BACKEND_BASE_URL}/tasks?${query.toString()}`, {
+          cache: "no-store",
+        });
+        const result = (await response.json()) as BackendTasksResponse;
+
+        if (!isCancelled && response.ok && result.success) {
+          setResults((result.data || []).map(toTaskSummary));
+        }
+
+        if (!isCancelled && (!response.ok || !result.success)) {
+          setResults([]);
+        }
+      } catch {
+        if (!isCancelled) {
+          setResults([]);
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadResults();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [q]);
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -39,12 +144,18 @@ export default async function SearchPage({
               {q ? `Results for "${q}"` : "Recommended tasks"}
             </h2>
             <p className="text-sm text-slate-500">
-              {results.length} task{results.length === 1 ? "" : "s"} found
+              {isLoading
+                ? "Loading tasks..."
+                : `${results.length} task${results.length === 1 ? "" : "s"} found`}
             </p>
           </div>
         </div>
 
-        {results.length > 0 ? (
+        {isLoading ? (
+          <div className="rounded-[30px] border border-slate-200 bg-white p-10 text-center shadow-sm">
+            <p className="text-sm text-slate-600">Loading tasks from API...</p>
+          </div>
+        ) : results.length > 0 ? (
           <div className="grid gap-4 lg:grid-cols-2">
             {results.map((task) => (
               <Link

@@ -9,11 +9,36 @@ import {
 import TaskSearchForm from "@/src/components/shohoj/TaskSearchForm";
 import ContributionGate from "@/src/components/shohoj/ContributionGate";
 import TaskMapPanel from "@/src/components/shohoj/TaskMapPanel";
-import { homeHighlights, shohojPathCopy } from "@/lib/shohoj-path/mock-data";
 import {
   getCommunityInsights,
   getFrontendTasks,
 } from "@/lib/shohoj-path/backend-api";
+
+const homeHighlights = [
+  {
+    title: "AI-powered semantic search",
+    description:
+      "Users can ask in plain language and get an intent-aware task path instead of generic links.",
+  },
+  {
+    title: "Map-based action flow",
+    description:
+      "Every key stop is attached to the task so users know where to go and in what order.",
+  },
+  {
+    title: "Community-ranked best path",
+    description:
+      "Upvotes, comments, and AI analysis keep the most practical workflow on top.",
+  },
+];
+
+const shohojPathCopy = {
+  title: "Kivabe Kori?",
+  brand: "Kivabe Kori?",
+  tagline: "Lunch er agei hobe.",
+  pitch:
+    "An AI-powered, community-driven task navigation platform for Bangladesh that turns confusing real-world processes into clear, step-by-step journeys.",
+};
 
 export default async function HomePage() {
   const tasks = await getFrontendTasks();

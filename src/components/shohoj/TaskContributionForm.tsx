@@ -6,8 +6,7 @@ import { Loader2, MessageSquarePlus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import type { TaskDetail } from "@/lib/shohoj-path/mock-data";
-import type { FrontendTaskComment } from "@/lib/shohoj-path/backend-api";
+import type { FrontendTaskComment, TaskDetail } from "@/lib/shohoj-path/backend-api";
 import useUserSlice from "@/src/redux/features/user/useUserSlice";
 import { getAccessToken } from "@/src/utils/authTokens";
 
