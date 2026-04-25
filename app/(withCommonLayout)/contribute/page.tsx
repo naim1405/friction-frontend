@@ -1,4 +1,5 @@
 import ContributionGate from "@/src/components/shohoj/ContributionGate";
+import CreateTaskContributionForm from "@/src/components/shohoj/CreateTaskContributionForm";
 
 export default function ContributePage() {
   return (
@@ -9,24 +10,15 @@ export default function ContributePage() {
           Help improve real-world task guidance
         </h1>
         <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
-          This frontend page explains the login gate and contribution flow. Once the backend is ready, it can post to
-          `/api/contributions` with task, step, contribution type, and moderation metadata.
+          Share a real process you know. Submitted tasks are saved in the backend and become available in search and task pages.
         </p>
 
         <div className="mt-8">
           <ContributionGate />
         </div>
 
-        <div className="mt-8 rounded-[28px] bg-slate-50 p-6">
-          <h2 className="text-xl font-semibold text-slate-950">Expected contribution payload</h2>
-          <pre className="mt-4 overflow-x-auto rounded-2xl bg-slate-950 p-4 text-sm text-slate-100">
-{`{
-  "taskSlug": "apply-passport",
-  "stepId": "passport-step-6",
-  "type": "improvement",
-  "comment": "Police verification was faster when I kept my landlord phone number ready."
-}`}
-          </pre>
+        <div className="mt-8">
+          <CreateTaskContributionForm />
         </div>
       </section>
     </main>

@@ -10,7 +10,9 @@ import {
 } from "lucide-react";
 import ContributionGate from "@/src/components/shohoj/ContributionGate";
 import TaskMapPanel from "@/src/components/shohoj/TaskMapPanel";
-import { getRelatedTasks, getRouteSummary, getTaskBySlug } from "@/lib/shohoj-path/mock-data";
+import TaskContributionForm from "@/src/components/shohoj/TaskContributionForm";
+import { getFrontendTask, getFrontendTasks } from "@/lib/shohoj-path/backend-api";
+import { getRouteSummary } from "@/lib/shohoj-path/mock-data";
 
 export default async function TaskDetailPage({
   params,
@@ -18,14 +20,16 @@ export default async function TaskDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const task = getTaskBySlug(slug);
+  const task = await getFrontendTask(slug);
 
   if (!task) {
     notFound();
   }
 
   const routeSummary = getRouteSummary(task.route);
-  const relatedTasks = getRelatedTasks(task.slug);
+  const relatedTasks = (await getFrontendTasks())
+    .filter((relatedTask) => relatedTask.id !== task.id)
+    .slice(0, 2);
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -200,6 +204,8 @@ export default async function TaskDetailPage({
 
           <ContributionGate taskSlug={task.slug} taskTitle={task.title} />
 
+          <TaskContributionForm task={task} />
+
           <article className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <h2 className="text-xl font-semibold text-slate-950">Related tasks</h2>
@@ -211,7 +217,7 @@ export default async function TaskDetailPage({
               {relatedTasks.map((relatedTask) => (
                 <Link
                   key={relatedTask.slug}
-                  href={`/tasks/${relatedTask.slug}`}
+                  href={`/tasks/${relatedTask.id}`}
                   className="block rounded-[24px] bg-slate-50 p-4 transition hover:bg-slate-100"
                 >
                   <p className="font-semibold text-slate-900">{relatedTask.title}</p>

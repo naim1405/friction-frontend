@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SearchX } from "lucide-react";
 import TaskSearchForm from "@/src/components/shohoj/TaskSearchForm";
-import { searchTasks } from "@/lib/shohoj-path/mock-data";
+import { getFrontendTasks } from "@/lib/shohoj-path/backend-api";
 
 export default async function SearchPage({
   searchParams,
@@ -9,7 +9,7 @@ export default async function SearchPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q = "" } = await searchParams;
-  const results = searchTasks(q);
+  const results = await getFrontendTasks(q);
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -46,7 +46,7 @@ export default async function SearchPage({
             {results.map((task) => (
               <Link
                 key={task.slug}
-                href={`/tasks/${task.slug}`}
+                href={`/tasks/${task.id}`}
                 className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200"
               >
                 <div className="flex items-center justify-between gap-3">

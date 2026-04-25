@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { MessageCircleHeart, TrendingUp, Users } from "lucide-react";
-import { communityInsights, tasks } from "@/lib/shohoj-path/mock-data";
+import { getCommunityInsights, getFrontendTasks } from "@/lib/shohoj-path/backend-api";
 
-export default function CommunityPage() {
+export default async function CommunityPage() {
+  const tasks = await getFrontendTasks();
+  const communityInsights = await getCommunityInsights();
+
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <section className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
@@ -70,7 +73,7 @@ export default function CommunityPage() {
             <h2 className="text-xl font-semibold text-slate-950">Most discussed tasks</h2>
             <div className="mt-4 space-y-3">
               {tasks.map((task) => (
-                <Link key={task.slug} href={`/tasks/${task.slug}`} className="block rounded-[24px] bg-slate-50 p-4">
+                <Link key={task.id} href={`/tasks/${task.id}`} className="block rounded-[24px] bg-slate-50 p-4">
                   <p className="font-semibold text-slate-900">{task.title}</p>
                   <p className="mt-1 text-sm text-slate-600">
                     {task.reviewCount} reviews • {task.savedCount} saves

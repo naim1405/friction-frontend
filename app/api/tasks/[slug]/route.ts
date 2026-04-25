@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { getTaskBySlug } from "@/lib/shohoj-path/mock-data";
+import { getFrontendTask } from "@/lib/shohoj-path/backend-api";
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const task = getTaskBySlug(slug);
+  const task = await getFrontendTask(slug).catch(() => null);
 
   if (!task) {
     return NextResponse.json(

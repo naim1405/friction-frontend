@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Bookmark, Clock3 } from "lucide-react";
-import { tasks } from "@/lib/shohoj-path/mock-data";
+import { getFrontendTasks } from "@/lib/shohoj-path/backend-api";
 
-export default function SavedPage() {
+export default async function SavedPage() {
+  const tasks = await getFrontendTasks();
+
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <section className="rounded-[34px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
@@ -16,7 +18,7 @@ export default function SavedPage() {
 
         <div className="mt-6 grid gap-4 lg:grid-cols-3">
           {tasks.map((task) => (
-            <Link key={task.slug} href={`/tasks/${task.slug}`} className="rounded-[28px] bg-slate-50 p-5">
+            <Link key={task.id} href={`/tasks/${task.id}`} className="rounded-[28px] bg-slate-50 p-5">
               <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-700">
                 Saved
               </span>

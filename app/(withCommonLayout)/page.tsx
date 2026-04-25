@@ -9,16 +9,14 @@ import {
 import TaskSearchForm from "@/src/components/shohoj/TaskSearchForm";
 import ContributionGate from "@/src/components/shohoj/ContributionGate";
 import TaskMapPanel from "@/src/components/shohoj/TaskMapPanel";
-import {
-  communityInsights,
-  homeHighlights,
-  shohojPathCopy,
-  tasks,
-} from "@/lib/shohoj-path/mock-data";
+import { homeHighlights, shohojPathCopy } from "@/lib/shohoj-path/mock-data";
+import { getCommunityInsights, getFrontendTasks } from "@/lib/shohoj-path/backend-api";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const tasks = await getFrontendTasks();
   const featuredTask = tasks[0];
   const popularTasks = tasks.slice(0, 3);
+  const communityInsights = await getCommunityInsights();
 
   return (
     <main className="overflow-hidden">
@@ -83,7 +81,7 @@ export default function HomePage() {
               {popularTasks.map((task) => (
                 <Link
                   key={task.slug}
-                  href={`/tasks/${task.slug}`}
+                  href={`/tasks/${task.id}`}
                   className="block rounded-[26px] border border-slate-100 bg-slate-50/80 p-5 transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-white"
                 >
                   <div className="flex items-start justify-between gap-4">

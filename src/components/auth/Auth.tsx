@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import AuthLoader from "./AuthLoader";
 import { getMe } from "@/src/service/auth/getMe";
 import useUserSlice from "@/src/redux/features/user/useUserSlice";
+import { clearAuthTokens } from "@/src/utils/authTokens";
 
 interface AuthProps {
     children: ReactNode;
@@ -36,6 +37,7 @@ export function Auth({ children }: AuthProps) {
                 if (success && userId) {
                     setUser({ userId, email });
                 } else {
+                    clearAuthTokens();
                     setUser({ userId: "", email: "" });
                 }
 
@@ -43,6 +45,7 @@ export function Auth({ children }: AuthProps) {
                 console.error("Error occurred while verifying authentication:", err);
 
                 if (isMounted) {
+                    clearAuthTokens();
                     setUser({ userId: "", email: "" });
                 }
             } finally {

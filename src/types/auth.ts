@@ -13,7 +13,12 @@ export type SignupFormValues = {
 
 export type SignupApiPayload = {
 	password: string;
-	admin: {
+	admin?: {
+		name: string;
+		email: string;
+		phone: string;
+	};
+	customer?: {
 		name: string;
 		email: string;
 		phone: string;

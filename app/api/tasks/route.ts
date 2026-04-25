@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { tasks } from "@/lib/shohoj-path/mock-data";
+import { getFrontendTasks } from "@/lib/shohoj-path/backend-api";
 
 export async function GET() {
+  const tasks = await getFrontendTasks();
+
   return NextResponse.json({
     success: true,
     data: tasks.map((task) => ({

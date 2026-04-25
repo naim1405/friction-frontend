@@ -25,7 +25,7 @@ const userApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		createAdmin: builder.mutation<IResponse<TAdmin>, SignupApiPayload>({
 			query: (data) => ({
-				url: "/user",
+				url: "/user/admin",
 				method: "POST",
 				data,
 			}),

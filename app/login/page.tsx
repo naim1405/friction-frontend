@@ -15,6 +15,7 @@ import type { LoginFormValues } from "@/src/types";
 import { getErrorMessage } from "@/src/utils/apiError";
 import { loginSchema } from "@/src/zod";
 import useUserSlice from "@/src/redux/features/user/useUserSlice";
+import { persistAuthTokens } from "@/src/utils/authTokens";
 
 const loginHighlights = [
 	"Contribute step improvements with your account",
@@ -43,6 +44,10 @@ const LoginPage = () => {
 				throw new Error(getErrorMessage(result, "Unable to login right now."));
 			}
             const { id, email } = result.data;
+			persistAuthTokens({
+				accessToken: result.data?.accessToken,
+				refreshToken: result.data?.refreshToken,
+			});
             setUser({ userId:id, email });
 
 			toast.success(result.message ?? "Login successful.");

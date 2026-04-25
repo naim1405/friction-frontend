@@ -1,4 +1,6 @@
 
+import { getAccessToken } from "@/src/utils/authTokens";
+
 const parseResponse = async (response: Response) => {
     try {
         return (await response.json())
@@ -31,8 +33,11 @@ export const postAuth = async <TPayload>(
             payload !== undefined
                 ? {
                     "Content-Type": "application/json",
+                    ...(getAccessToken() ? { Authorization: `Bearer ${getAccessToken()}` } : {}),
                 }
-                : undefined,
+                : getAccessToken()
+                    ? { Authorization: `Bearer ${getAccessToken()}` }
+                    : undefined,
         body: payload !== undefined ? JSON.stringify(payload) : undefined,
     });
 

@@ -36,7 +36,7 @@ const SignupPage = () => {
 
 			const { ok, result } = await signup({
 				password: values.password,
-				admin: {
+				customer: {
 					name: values.name.trim(),
 					email: values.email.trim().toLowerCase(),
 					phone: normalizedPhone,

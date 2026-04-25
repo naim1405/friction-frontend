@@ -35,9 +35,6 @@ const Footer = () => {
               <Link href="/community" className="transition hover:text-white">
                 Community
               </Link>
-              <Link href="/api-spec" className="transition hover:text-white">
-                API Spec
-              </Link>
               {isLoggedIn ? (
                 <Link href="/contribute" className="transition hover:text-white">
                   Contribute

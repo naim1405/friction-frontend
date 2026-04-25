@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import useUserSlice from "@/src/redux/features/user/useUserSlice";
 import { handleLogout } from "@/src/service/auth/logout";
+import { clearAuthTokens } from "@/src/utils/authTokens";
 
 const Navbar = () => {
   const router = useRouter();
@@ -20,21 +21,21 @@ const Navbar = () => {
     { href: "/community", label: "Community" },
     { href: "/my-tasks", label: "My Tasks" },
     { href: "/saved", label: "Saved" },
-    { href: "/api-spec", label: "API Spec" },
   ];
 
   const onLogout = async () => {
     try {
       setIsLoggingOut(true);
       await handleLogout();
-      clearUser();
       toast.success("Logged out successfully.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Server logout failed, but local session was cleared.");
+    } finally {
+      clearAuthTokens();
+      clearUser();
+      setIsLoggingOut(false);
       router.push("/");
       router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Logout failed. Please try again.");
-    } finally {
-      setIsLoggingOut(false);
     }
   };
 

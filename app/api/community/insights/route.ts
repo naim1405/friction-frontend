@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { communityInsights } from "@/lib/shohoj-path/mock-data";
+import { getCommunityInsights } from "@/lib/shohoj-path/backend-api";
 
 export async function GET() {
+  const communityInsights = await getCommunityInsights();
+
   return NextResponse.json({
     success: true,
     data: communityInsights,

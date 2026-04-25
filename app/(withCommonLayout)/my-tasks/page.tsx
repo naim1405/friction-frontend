@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { CheckCircle2, Route } from "lucide-react";
 import ContributionGate from "@/src/components/shohoj/ContributionGate";
-import { tasks } from "@/lib/shohoj-path/mock-data";
+import { getFrontendTasks } from "@/lib/shohoj-path/backend-api";
 
-export default function MyTasksPage() {
+export default async function MyTasksPage() {
+  const tasks = await getFrontendTasks();
   const inProgress = tasks.slice(0, 2);
 
   return (
@@ -18,7 +19,7 @@ export default function MyTasksPage() {
 
           <div className="mt-6 space-y-4">
             {inProgress.map((task) => (
-              <Link key={task.slug} href={`/tasks/${task.slug}`} className="block rounded-[28px] bg-slate-50 p-5">
+              <Link key={task.id} href={`/tasks/${task.id}`} className="block rounded-[28px] bg-slate-50 p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <h2 className="text-lg font-semibold text-slate-900">{task.title}</h2>
